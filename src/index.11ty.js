@@ -13,6 +13,31 @@ module.exports = {
 
     const assetsReversed = data.collections.paintingsEN.map((item) => `<img id="${item.metadata.id}-reversed" src="${item.metadata.imgSrcReverseProxied}" crossorigin>`);
 
+    const getRelatedWorks = (item) => {
+      if(item.references.length === 0) return;
+
+      const relatedWorks = item.references.map((element, index) => {
+
+        const {inventoryNumber} = element;
+        const relatedWork = data.collections.paintingsEN.find(item => item.inventoryNumber === inventoryNumber);
+        if(!relatedWork) return;
+
+        const width = relatedWork.metadata.dimensions.width / 1000;
+        const height = relatedWork.metadata.dimensions.height / 1000;
+        const posY = (index * height * -1.2) - 1;
+        
+        return `
+          <a-image src="#${relatedWork.metadata.id}" 
+            name="related-work"
+            position="0 ${posY} 0" 
+            width="${width}"
+            height="${height}"
+            rotation="${index*-10} 0 0"></a-image>`;
+      });
+
+      return relatedWorks.join('');
+    };
+
     const getYear = (year, position) => {
       if (currentYear === year) return '';
 
@@ -69,6 +94,8 @@ module.exports = {
               width="${width}"
               height="${height}"
               rotation="0 0 0" ></a-image>
+
+              ${getRelatedWorks(item)}
           </a-entity>
           
           <a-entity position="1.01 0.5 ${(width*5)/2 - 0.5}" rotation="0 90 0" name="extended-info" visible="false">
