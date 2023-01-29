@@ -33,8 +33,9 @@ module.exports = {
       const height = item.metadata.dimensions.height / 100;
       const yPos = (height / 2) + 1.2 //(height / 2) - 0.5;
       const artist = item.involvedPersons[0].name;
-      const dimensions = item.dimensions.replace(/\n|\r/g, '').replace(/\[.*?\]/g, '').replace(/\(.*?\)/g, '');
-
+      const dimensions = item.dimensions.replace(/\n|\r/g, ' ').replace(/  /g, '').replace(/\[.*?\]/g, '').replace(/\(.*?\)/g, '');
+      
+      const description = item.description.replace(/\[.*?\]/g, '').replace(/\(.*?\)/g, '').replace(/[^a-zA-Z 0-9\.\,]/g, '');//item.description.replace(/\n|\r/g, ' ').replace(/  /g, '')replace(/\[.*?\]/g, '').replace(/\(.*?\)/g, '');
       return `
       
       <a-entity id="${item.metadata.id}" name="artefact" position="0, 0, -${position}">
@@ -46,7 +47,7 @@ module.exports = {
             height="${height}"
             rotation="0 45 0" ></a-image>
           
-          <a-entity position="3, 0.5, ${(width*5)/2 - 0.5}" rotation="0 90 0" name="extended-info" visible="false">
+          <a-entity position="1.01, 0.5, ${(width*5)/2 - 0.5}" rotation="0 90 0" name="extended-info" visible="false">
             <a-entity position="0, 0.5, 0"
               text="width: 1; lineHeight: 50; align: left; color: white;
               baseline: bottom;
@@ -64,7 +65,7 @@ module.exports = {
               baseline: top;
               wrapCount: 50;
               shader: msdf; font:https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Regular.json;
-              value: ${dimensions}"></a-entity>
+              value: ${dimensions}\n\n${description}"></a-entity>
           </a-entity>
 
           <a-entity position="0, 0, 0" name="info" visible="true">

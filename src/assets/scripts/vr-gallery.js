@@ -15,7 +15,7 @@ const moveCam = (x, y, z, rotation) => {
 const transformImage = (image, mode) => {
 
     const scaleFactor = 5;
-    const stepTowardsUser = 3;
+    const stepTowardsUser = 1;
     const rotateTowardsUser = 90;
 
     const largeImageUrl = image.getAttribute('large-image');
