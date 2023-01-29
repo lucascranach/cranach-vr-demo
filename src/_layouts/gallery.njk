@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cda Gemälde // {{ title }}</title>
+
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/images/outline_face_black_24dp.png"
+    />
+      <link href="{{'/compiled-assets/main.css' | url }}" rel="stylesheet">
+      <link href="{{'/assets/images/favicon.svg' | url }}" rel="icon" type="image/svg">
+      <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+      <script src="https://gftruj.github.io/webzamples/aframe/controls/oculus-thumbstick-controls.js"></script>
+      <script src="//cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+      <script src="{{'/assets/scripts/extended-wasd-controls.js' | url }}"></script>
+      <script src="{{'/assets/scripts/vr-gallery.js' | url }}"></script>
+      <script src="https://unpkg.com/aframe-animation-component@5.1.2/dist/aframe-animation-component.min.js"></script>
+
+  </head>
+  <body>
+      {{ content | safe }}
+  </body>
+</html>
