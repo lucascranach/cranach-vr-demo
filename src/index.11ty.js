@@ -15,13 +15,13 @@ module.exports = {
       return `
       <a-entity line="start: -1, -1.10 -${position}; end: -1, 3 -${position};
         opacity: 0.2;
-        color: #feb701;"></a-entity>
-      <a-entity rotation="0 90 0" position="-1, -2.2, -${position+1.22}"
-        text="width: 3; lineHeight: 50; align: right; color: #feb701;
+        color: #ffffff;"></a-entity>
+      <a-entity rotation="0 90 0" position="-0.9, -2.2, -${position+1.25}"
+        text="width: 3; lineHeight: 50; align: right; color: #ffffff;
         baseline: bottom;
         wrapCount: 4;
         transparent: true;
-        opacity: 0.1;
+        opacity: 0.05;
         shader: msdf; font:https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Bold.json;
         value: ${year}"></a-entity>
       `;
@@ -39,7 +39,8 @@ module.exports = {
       
       <a-entity id="${item.metadata.id}" name="artefact" position="0, 0, -${position}">
           <a-image
-            src="#${item.metadata.id}" 
+            src="#${item.metadata.id}"
+            large-image="${item.metadata.imgSrcProxiedLarge}"
             position="0, ${yPos}, 0"
             width="${width}"
             height="${height}"
@@ -67,13 +68,13 @@ module.exports = {
           </a-entity>
 
           <a-entity position="0, 0, 0" name="info" visible="true">
-            <a-entity position="1.02, 0.5, 0"
+            <a-entity position="1.02, 0.65, 0"
               text="width: 1; lineHeight: 50; align: left; color: white;
-              baseline: bottom;
-              wrapCount: 30;
+              baseline: top;
+              wrapCount: 50;
               shader: msdf; font:https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Regular.json;
               value: ${item.metadata.title}"></a-entity>            
-            <a-entity line="start: 0.5 0.7 0; end: 0 1.2 0; color: #555555"></a-entity>
+            <a-entity line="start: 0.5 0.7 0; end: 0 1.2 0; color: #555555; opacity: 0.4; transparent: true;"></a-entity>
           </a-entity>
         </a-entity>
 

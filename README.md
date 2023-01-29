@@ -30,3 +30,7 @@ compiled-assets     Kompilierte Dateien, z.B. CSS
 `npm install`
 `npm run build` 
 `npm run dev` 
+
+## Resources
+- [aframe-animation-component](https://github.com/supermedium/superframe/tree/master/components/animation/)
+- [A-Frame Examples](https://github.com/stemkoski/A-Frame-Examples)

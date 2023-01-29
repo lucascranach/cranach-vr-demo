@@ -234,6 +234,7 @@ const getPaintingsCollection = (lang) => {
     const imageServerPattern = config.imageTiles.production;
     Item.metadata.imgSrcProxied = Item.metadata.imgSrc.replace(imageServerPattern, config.imageProxy);
     Item.metadata.imgSrcProxied = Item.metadata.imgSrcProxied.replace(/\-s\.jpg/, "-m.jpg");
+    Item.metadata.imgSrcProxiedLarge = Item.metadata.imgSrcProxied.replace(/\-m\.jpg/, "-origin.jpg");
     Item.metadata.dimensions = extractDimensions(Item);
 
     return Item;
@@ -342,6 +343,11 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.setBrowserSyncConfig({
     snippet: true,
   });
+
+  eleventyConfig.browserSyncConfig = {
+    https: true
+  };
+
   /* Compilation
     ########################################################################## */
 
