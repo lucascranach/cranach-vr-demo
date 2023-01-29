@@ -11,6 +11,8 @@ module.exports = {
 
     const assets = data.collections.paintingsEN.map((item) => `<img id="${item.metadata.id}" src="${item.metadata.imgSrcProxied}" crossorigin>`);
 
+    const assetsReversed = data.collections.paintingsEN.map((item) => `<img id="${item.metadata.id}-reversed" src="${item.metadata.imgSrcReverseProxied}" crossorigin>`);
+
     const getYear = (year, position) => {
       if (currentYear === year) return '';
 
@@ -41,16 +43,33 @@ module.exports = {
       
       const description = item.description.replace(/\[.*?\]/g, '').replace(/\(.*?\)/g, '').replace(/[^a-zA-Z 0-9\.\,\r\n]/g, '').replace(/  /g, ' ');//item.description.replace(/\n|\r/g, ' ').replace(/  /g, '')replace(/\[.*?\]/g, '').replace(/\(.*?\)/g, '');
       return `
-      
-      <a-entity id="${item.metadata.id}" name="artefact" position="0 0 -${position}">
-          <a-image
-            src="#${item.metadata.id}"
-            large-image="${item.metadata.imgSrcProxiedLarge}"
-            small-image="${item.metadata.imgSrcProxied}"
-            position="0, ${yPos}, 0"
+
+        <a-entity id="${item.metadata.id}" name="artefact" position="0 0 -${position}">
+          <a-entity 
+            name="artefact-image"
+            position="0 ${yPos} 0"
             width="${width}"
             height="${height}"
-            rotation="0 45 0" ></a-image>
+            rotation="0 45 0">
+
+            <a-image
+              name="reversed-image"
+              src="#${item.metadata.id}-reversed"
+              position="0 0 -0.05"
+              width="${width}"
+              height="${height}"
+              rotation="0 180 0" ></a-image>
+
+            <a-image
+              name="overall-image"
+              src="#${item.metadata.id}"
+              large-image="${item.metadata.imgSrcProxiedLarge}"
+              small-image="${item.metadata.imgSrcProxied}"
+              position="0 0 0"
+              width="${width}"
+              height="${height}"
+              rotation="0 0 0" ></a-image>
+          </a-entity>
           
           <a-entity position="1.01 0.5 ${(width*5)/2 - 0.5}" rotation="0 90 0" name="extended-info" visible="false">
             <a-entity position="0 0.5 0"
@@ -103,21 +122,22 @@ module.exports = {
 
       `;
     });
-    console.log(about.length);
+    
     return `
   <a-scene light="defaultLightsEnabled: false" fog="type: linear; color: #333333" >
   <a-assets>
     ${assets.join('')}
+    ${assetsReversed.join('')}
   </a-assets>
   
   ${images.join('')}
 
   <a-entity rotation="270 90 0" position="3 -2 ${about.length * -0.5}"
-    text="width: ${about.length}; lineHeight: 45; align: left; color: #ffffff;
+    text="width: ${about.length}; lineHeight: 45; align: left; color: #000000;
     baseline: bottom;
     wrapCount: ${about.length};
     transparent: true;
-    opacity: 0.2;
+    opacity: 0.5;
     shader: msdf; font:https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Bold.json;
     value: ${about}"></a-entity>
 

@@ -12,16 +12,38 @@ const moveCam = (x, y, z, rotation) => {
 
 };
 
+const animateImage = (params) => {
+
+    const {item, scale, rotation, position} = params;
+
+    item.setAttribute('animation__scale', {
+        property: 'scale',
+        dur: 1000,
+        to: `${scale} ${scale} ${scale}`,
+        easing: 'easeOutElastic'});
+    item.setAttribute('animation__rotation', {
+        property: 'rotation',
+        dur: 4000,
+        to: `0 ${rotation} 0`,
+        easing: 'easeOutElastic'});
+    item.setAttribute('animation__position', {
+        property: 'position',
+        dur: 4000,
+        to: position,
+        easing: 'easeOutElastic'});
+};
+
 const transformImage = (image, mode) => {
 
     const scaleFactor = 5;
     const stepTowardsUser = 2;
     const rotateTowardsUser = 90;
 
-    const largeImageUrl = image.getAttribute('large-image');
-    const smallImageUrl = image.getAttribute('large-image');
+    const overallImage = image.querySelector('[name="overall-image"]');
+    const largeImageUrl = overallImage.getAttribute('large-image');
+    const smallImageUrl = overallImage.getAttribute('large-image');
     const imgUrl = 'backInLine' ? smallImageUrl : largeImageUrl;
-    image.setAttribute('src', imgUrl);
+    overallImage.setAttribute('src', imgUrl);
 
     const height = image.getAttribute('height');
     const position = image.getAttribute('position');
@@ -35,21 +57,8 @@ const transformImage = (image, mode) => {
 
     const newPosition = `${xPos} ${yPos} ${position.z}`;
 
-    image.setAttribute('animation__scale', {
-        property: 'scale',
-        dur: 1000,
-        to: `${scale} ${scale} ${scale}`,
-        easing: 'easeOutElastic'});
-    image.setAttribute('animation__rotation', {
-        property: 'rotation',
-        dur: 4000,
-        to: `0 ${rotation} 0`,
-        easing: 'easeOutElastic'});
-    image.setAttribute('animation__position', {
-        property: 'position',
-        dur: 4000,
-        to: newPosition,
-        easing: 'easeOutElastic'});
+    animateImage({item: image, scale, rotation, position: newPosition});
+
     return yPosExtendedInfo;
 };
 
@@ -119,10 +128,10 @@ const moveExtendedInfo = (artefact, yPosExtendedInfo) => {
 const focusArtefact = (ele) => {
 
     const artefact = ele.closest('[name="artefact"]');
-    const image = artefact.querySelector('a-image');
+    const image = artefact.querySelector('[name="artefact-image"]');
 
     if(activeItem === artefact){
-        const activeItemImage = activeItem.querySelector('a-image');
+        const activeItemImage = activeItem.querySelector('[name="artefact-image"]');
         transformImage(activeItemImage, 'backInLine');
         toggleInfo(activeItem);
         activeItem = false;
@@ -130,7 +139,7 @@ const focusArtefact = (ele) => {
     }
     
     if(activeItem !== false){
-        const activeItemImage = activeItem.querySelector('a-image');
+        const activeItemImage = activeItem.querySelector('[name="artefact-image"]');
         transformImage(activeItemImage, 'backInLine');
         toggleInfo(activeItem);
     };

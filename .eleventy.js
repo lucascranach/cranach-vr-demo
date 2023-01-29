@@ -235,6 +235,10 @@ const getPaintingsCollection = (lang) => {
     Item.metadata.imgSrcProxied = Item.metadata.imgSrc.replace(imageServerPattern, config.imageProxy);
     Item.metadata.imgSrcProxied = Item.metadata.imgSrcProxied.replace(/\-s\.jpg/, "-m.jpg");
     Item.metadata.imgSrcProxiedLarge = Item.metadata.imgSrcProxied.replace(/\-m\.jpg/, "-origin.jpg");
+    
+    Item.metadata.imgSrcReverseProxied = Item.images.reverse 
+      ? Item.images.reverse.images[0].sizes.medium.src.replace(imageServerPattern, config.imageProxy)
+      : null;
     Item.metadata.dimensions = extractDimensions(Item);
 
     return Item;
