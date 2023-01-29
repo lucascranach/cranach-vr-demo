@@ -15,11 +15,13 @@ const moveCam = (x, y, z, rotation) => {
 const transformImage = (image, mode) => {
 
     const scaleFactor = 5;
-    const stepTowardsUser = 1;
+    const stepTowardsUser = 2;
     const rotateTowardsUser = 90;
 
     const largeImageUrl = image.getAttribute('large-image');
-    image.setAttribute('src', largeImageUrl);
+    const smallImageUrl = image.getAttribute('large-image');
+    const imgUrl = 'backInLine' ? smallImageUrl : largeImageUrl;
+    image.setAttribute('src', imgUrl);
 
     const height = image.getAttribute('height');
     const position = image.getAttribute('position');
@@ -88,13 +90,16 @@ const transformInfo = (info, imagePosition, mode) => {
 const toggleInfo = (artefact) => {
 
     const info = artefact.querySelector('[name="info"]');
-    const extendedInfo = artefact.querySelector('[name="extended-info"]');
+    // const extendedInfo = artefact.querySelector('[name="extended-info"]');
+    const extendedSideInfo = artefact.querySelector('[name="extended-side-info"]');
     
     const infoVisibiity = info.getAttribute('visible') === true ? false : true;
-    const extendedInfoVisibiity = extendedInfo.getAttribute('visible') === true ? false : true;
+    // const extendedInfoVisibiity = extendedInfo.getAttribute('visible') === true ? false : true;
+    const extendedSideInfoVisibiity = extendedSideInfo.getAttribute('visible') === true ? false : true;
     
     info.setAttribute("visible",infoVisibiity);
-    extendedInfo.setAttribute("visible",extendedInfoVisibiity);
+    // extendedInfo.setAttribute("visible",extendedInfoVisibiity);
+    extendedSideInfo.setAttribute("visible",extendedSideInfoVisibiity);
 };
 
 const moveExtendedInfo = (artefact, yPosExtendedInfo) => {
