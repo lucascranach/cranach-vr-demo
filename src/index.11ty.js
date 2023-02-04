@@ -15,24 +15,37 @@ module.exports = {
 
     const getRelatedWorks = (item) => {
       if(item.references.length === 0) return;
+      
+      const parentWidth = item.metadata.dimensions.width / 100;
+      const parentheight = item.metadata.dimensions.height / 100;
 
-      const relatedWorks = item.references.map((element, index) => {
+      const widthRelatedWork = parentWidth * 0.2;
+      const padding = widthRelatedWork/2;
+      
+      let count = 0;
+      let posX = widthRelatedWork/2;
+      
+      const relatedWorks = item.references.map(element => {
 
         const {inventoryNumber} = element;
         const relatedWork = data.collections.paintingsEN.find(item => item.inventoryNumber === inventoryNumber);
         if(!relatedWork) return;
 
-        const width = relatedWork.metadata.dimensions.width / 1000;
-        const height = relatedWork.metadata.dimensions.height / 1000;
-        const posY = (index * height * -1.2) - 1;
-        
+        count++;
+
+        const ratio = relatedWork.metadata.dimensions.width / relatedWork.metadata.dimensions.height;
+        const width = widthRelatedWork;
+        const height = width/ratio;
+        posX = posX + widthRelatedWork + padding;
+        const posY = height/2;
+
         return `
-          <a-image src="#${relatedWork.metadata.id}" 
+          <a-image src="${relatedWork.metadata.imgSrcProxied}"}" 
             name="related-work"
-            position="0 ${posY} 0" 
+            position="${posX} ${-posY} 0" 
             width="${width}"
             height="${height}"
-            rotation="${index*-10} 0 0"></a-image>`;
+            rotation="0 0 0"></a-image>`;
       });
 
       return relatedWorks.join('');
@@ -95,7 +108,16 @@ module.exports = {
               height="${height}"
               rotation="0 0 0" ></a-image>
 
+              <a-entity position="${-width/2} -${height} 0" rotation="-45 0 0" name="related-works" visible="false">
+              <a-entity position="-0.3 -0.04 0"
+              text="width: 1; lineHeight: 50; align: right; color: white;
+              baseline: top;
+              wrapCount: 50;
+              shader: msdf; font:https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Regular.json;
+              value: Related Works"></a-entity>
               ${getRelatedWorks(item)}
+              </a-entity>
+
           </a-entity>
           
           <a-entity position="1.01 0.5 ${(width*5)/2 - 0.5}" rotation="0 90 0" name="extended-info" visible="false">
@@ -141,7 +163,7 @@ module.exports = {
               wrapCount: 50;
               shader: msdf; font:https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Regular.json;
               value: ${item.metadata.title}"></a-entity>            
-            <a-entity line="start: 0.5 0.7 0; end: 0 1.2 0; color: #555555; opacity: 0.4; transparent: true;"></a-entity>
+            <a-entity line="start: 0.5 0.7 0; end: 0 1.2 0; color: #aaaaaa; opacity: 0.1; transparent: false;"></a-entity>
           </a-entity>
         </a-entity>
 
@@ -187,7 +209,7 @@ module.exports = {
   <a-entity id="rig" position="0 1.8 0" rotation="0 0 0" movement-controls="fly: true" >
     <a-camera id="camera" position="5 0 15" look-controls extended-wasd-controls="flyEnabled: true; turnEnabled: true; lookEnabled: true; maxLookAngle: 60;"><a-cursor></a-cursor></a-camera>
     <a-entity oculus-touch-controls="hand: left" ></a-entity>
-    <a-entity oculus-touch-controls="hand: right" oculus-thumbstick-controls  orientationOffset="x:2 y:-0.25 z:6"></a-entity>
+    <a-entity oculus-touch-controls="hand: right" oculus-thumbstick-controls  orientationOffset="x:20 y:-0.25 z:6"></a-entity>
   </a-entity>
 </a-scene>
 

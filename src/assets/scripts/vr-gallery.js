@@ -1,4 +1,5 @@
 let activeItem = false;
+let faded = false;
 
 const moveCam = (x, y, z, rotation) => {
     const cam = document.querySelector('#camera');
@@ -96,19 +97,56 @@ const transformInfo = (info, imagePosition, mode) => {
         easing: 'easeInQuad'});
 };
 
+const fadeOthers = (artefact) => {
+    const elements = document.querySelectorAll('[name="artefact"]');
+    const visibility = faded ? true : false;
+    elements.forEach((element) => {
+        if(element !== artefact){
+            element.setAttribute('visible', visibility );
+        };
+    });
+    const to = faded ? 1 : 0.05;
+
+    elements.forEach((element) => {
+        if(element !== artefact){
+            const images = element.querySelectorAll('a-image');
+            images.forEach((image) => {
+                image.setAttribute('animation__opacity', {
+                    property: 'opacity',
+                    dur: 1200,
+                    to: to,
+                    easing: 'easeInQuad'});
+            });
+        }
+    });
+
+    const lines = document.querySelectorAll('[line]');
+    
+    const toLines = faded ? '#ffffff' : '#000000';
+    lines.forEach((line) => {
+        line.setAttribute('visible', visibility );
+    });
+    faded = !faded;
+};
+
 const toggleInfo = (artefact) => {
 
     const info = artefact.querySelector('[name="info"]');
     // const extendedInfo = artefact.querySelector('[name="extended-info"]');
     const extendedSideInfo = artefact.querySelector('[name="extended-side-info"]');
-    
+    const relatedWorks = artefact.querySelector('[name="related-works"]');
+
     const infoVisibiity = info.getAttribute('visible') === true ? false : true;
     // const extendedInfoVisibiity = extendedInfo.getAttribute('visible') === true ? false : true;
     const extendedSideInfoVisibiity = extendedSideInfo.getAttribute('visible') === true ? false : true;
-    
+    const relatedWorksVisibiity = relatedWorks.getAttribute('visible') === true ? false : true;
+
     info.setAttribute("visible",infoVisibiity);
     // extendedInfo.setAttribute("visible",extendedInfoVisibiity);
     extendedSideInfo.setAttribute("visible",extendedSideInfoVisibiity);
+    relatedWorks.setAttribute("visible",relatedWorksVisibiity);
+
+    fadeOthers(artefact);
 };
 
 const moveExtendedInfo = (artefact, yPosExtendedInfo) => {
