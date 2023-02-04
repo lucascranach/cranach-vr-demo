@@ -14,11 +14,8 @@ module.exports = {
     const assetsReversed = data.collections.paintingsEN.map((item) => `<img id="${item.metadata.id}-reversed" src="${item.metadata.imgSrcReverseProxied}" crossorigin>`);
 
     const getRelatedWorks = (item) => {
-      if(item.references.length === 0) return;
-      
+      if(item.references.length === 0) return '';
       const parentWidth = item.metadata.dimensions.width / 100;
-      const parentheight = item.metadata.dimensions.height / 100;
-
       const widthRelatedWork = parentWidth * 0.2;
       const padding = widthRelatedWork/2;
       
@@ -26,11 +23,9 @@ module.exports = {
       let posX = widthRelatedWork/2;
       
       const relatedWorks = item.references.map(element => {
-
         const {inventoryNumber} = element;
         const relatedWork = data.collections.paintingsEN.find(item => item.inventoryNumber === inventoryNumber);
         if(!relatedWork) return;
-
         count++;
 
         const ratio = relatedWork.metadata.dimensions.width / relatedWork.metadata.dimensions.height;
@@ -48,7 +43,18 @@ module.exports = {
             rotation="0 0 0"></a-image>`;
       });
 
-      return relatedWorks.join('');
+      const relatedWorksWithData = relatedWorks.filter(x => x !== undefined);
+      
+      if(relatedWorksWithData.length === 0) return '';
+      return `
+        <a-entity position="-0.3 -0.04 0"
+          text="width: 1; lineHeight: 50; align: right; color: white;
+          baseline: top;
+          wrapCount: 50;
+          shader: msdf; font:https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Regular.json;
+          value: Related Works"></a-entity>
+          ${relatedWorksWithData.join('')}
+      `;
     };
 
     const getYear = (year, position) => {
@@ -109,12 +115,6 @@ module.exports = {
               rotation="0 0 0" ></a-image>
 
               <a-entity position="${-width/2} -${height} 0" rotation="-45 0 0" name="related-works" visible="false">
-              <a-entity position="-0.3 -0.04 0"
-              text="width: 1; lineHeight: 50; align: right; color: white;
-              baseline: top;
-              wrapCount: 50;
-              shader: msdf; font:https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/notosans/NotoSans-Regular.json;
-              value: Related Works"></a-entity>
               ${getRelatedWorks(item)}
               </a-entity>
 
@@ -208,9 +208,27 @@ module.exports = {
   
   <a-entity id="rig" position="0 1.8 0" rotation="0 0 0" movement-controls="fly: true" >
     <a-camera id="camera" position="5 0 15" look-controls extended-wasd-controls="flyEnabled: true; turnEnabled: true; lookEnabled: true; maxLookAngle: 60;"><a-cursor></a-cursor></a-camera>
-    <a-entity oculus-touch-controls="hand: left" ></a-entity>
-    <a-entity oculus-touch-controls="hand: right" oculus-thumbstick-controls  orientationOffset="x:20 y:-0.25 z:6"></a-entity>
+    <a-entity id="left-controller" oculus-touch-controls="hand: left" ></a-entity>
+    <a-entity id="right-controller" oculus-touch-controls="hand: right" oculus-thumbstick-controls orientationOffset="x:20 y:-0.25 z:6"></a-entity>
   </a-entity>
+
+  <a-entity 
+  id="controller-data" 
+  controller-listener="leftControllerId:  #left-controller; 
+                       rightControllerId: #right-controller;">
+</a-entity>
+
+
+<a-entity
+id="textArea"
+position="0 1.5 -1.9"
+geometry="primitive: plane;  width: 3; height: auto"
+material="color: #444444; transparent: true; opacity: 0.80;"
+text="anchor: center; baseline: center; wrapCount: 40;
+    transparent: true; opacity: 0.90; color: #8888FF;
+    value: 1 \n 2 \n 3 \n 4"
+text-display>
+</a-entity>
 </a-scene>
 
     `;

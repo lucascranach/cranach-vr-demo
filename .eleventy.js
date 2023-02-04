@@ -167,9 +167,6 @@ const getPaintingsCollection = (lang) => {
   const paintingsForLang = paintingsData[lang];
   const devObjects = ["PRIVATE_NONE-P201", "US_MMANY_55-220-2", "UK_RCL_RCIN402656","DE_MdbKL_946","DE_SKD_RKH97", "PRIVATE_NONE-P201", "DE_MKKM_1232BRD","PRIVATE_NONE-P411","UK_BMAG_K1650","DK_SMK_KMS3674", "US_CMA_1953-143", "DE_LHW_G25","ANO_H-NONE-019","DE_KSW_G9", "AT_KHM_GG885", "AT_KHM_GG861a","AT_KHM_GG861","AT_KHM_GG886","AT_KHM_GG856","AT_KHM_GG858","PRIVATE_NONE-P449","AR_MNdBABA_8632","AT_KHM_GG860","AT_KHM_GG885","AT_KHM_GG3523","PRIVATE_NONE-P443","PRIVATE_NONE-P450","AT_SZ_SZ25-416-129","CZ_NGP_O9619","CH_PTSS-MAS_A653","CH_SORW_1925-1b","DE_AGGD_15","DE_StMB_NONE-001c","AT_KHM_GG6905", "DE_StMT","DE_StMB_NONE-001d", "AT_KHM_GG6739", "PRIVATE_NONE-P409","CH_SORW_1925-1a"];
 
-  /*const paintings = process.env.ELEVENTY_ENV === 'production'
-    ? paintingsForLang.items
-    : paintingsForLang.items.filter(item=>item.isBestOf===true); //.filter(item => devObjects.includes(item.inventoryNumber));*/
   
   const paintings = paintingsForLang.items.filter(item=>item.isBestOf===true);
   
@@ -185,13 +182,6 @@ const getPaintingsCollection = (lang) => {
     if (a.sortValue > b.sortValue) return 1;
     return 0;
   });
-  if (lang === "de") { 
-    const ids = sortedPaintings.map(item => { 
-      if (item.sortingNumber.match(/\-/)) { 
-        // appendToFile("ids.txt", `${item.inventoryNumber}\t${item.sortingNumber}\n`)
-      }
-    });
-  }
 
   const cleanValue = (value) => {
     return parseFloat(value);
@@ -247,53 +237,6 @@ const getPaintingsCollection = (lang) => {
   return sortedPaintingsWithProxiedImage.filter(item => item.metadata.imgSrc.match(/[a-z]/));
 }
 
-const getArchivalsCollection = (lang) => {
-  const archivalsForLang = archivalsData[lang];
-  const devObjects = ["PRIVATE_NONE-P409", "DE_LHW_G25","ANO_H-NONE-019","DE_KSW_G9", "AT_KHM_GG885", "AT_KHM_GG861a","AT_KHM_GG861","AT_KHM_GG886","AT_KHM_GG856","AT_KHM_GG858","PRIVATE_NONE-P449","AR_MNdBABA_8632","AT_KHM_GG860","AT_KHM_GG885","AT_KHM_GG3523","PRIVATE_NONE-P443","PRIVATE_NONE-P450","AT_SZ_SZ25-416-129","CZ_NGP_O9619","CH_PTSS-MAS_A653","CH_SORW_1925-1b","DE_AGGD_15","DE_StMB_NONE-001c","AT_KHM_GG6905", "DE_StMT","DE_StMB_NONE-001d", "AT_KHM_GG6739"];
-
-  const archivals = process.env.ELEVENTY_ENV === 'production'
-    ? archivalsForLang.items
-    : archivalsForLang.items; // .filter(item => devObjects.includes(item.inventoryNumber));
-  
-  let sortedArchivals = archivals.sort((a, b) => {
-    if (a.period < b.period) return -1;
-    if (a.period > b.period) return 1;
-    return 0;
-  });
-
-  return sortedArchivals;
-}
-
-
-
-const getGraphicsRealObjectsCollection = (lang) => {
-  const graphicsRealObjectsForLang = graphicsRealObjectData[lang];
-  const sortedGraphicsRealObjects = graphicsRealObjectsForLang.items.sort((a, b)=>{
-    if (a.sortingNumber < b.sortingNumber) return -1;
-    if (a.sortingNumber > b.sortingNumber) return 1;
-    return 0;
-  });
-
-  return sortedGraphicsRealObjects;
-}
-
-const getGraphicsVirtualObjectsCollection = (lang) => {
-  const graphicsVirtualObjectsForLang = graphicsVirtualObjectData[lang];
-  const devObjects = ["ANO_H-NONE-002", "ANO_H-NONE-017","ANO_HVI-7-6", "HBG_HVI-8_7-4", "HB_HIV-259-595"];
-  
-  const graphicsVirtualObjects = process.env.ELEVENTY_ENV === 'production'
-    ? graphicsVirtualObjectsForLang.items
-    : graphicsVirtualObjectsForLang.items.filter(item => devObjects.includes(item.inventoryNumber));
-
-  const sortedGraphicsVirtualObjects = graphicsVirtualObjects.sort((a, b)=>{
-    if (a.sortingNumber < b.sortingNumber) return -1;
-    if (a.sortingNumber > b.sortingNumber) return 1;
-    return 0;
-  });
-
-  return sortedGraphicsVirtualObjects.filter(item => item.metadata.imgSrc.match(/[a-z]/));
-}
-
 const markdownify = (str, mode = 'full') => {
 
   function replacePre(match, str) {
@@ -309,31 +252,6 @@ const markdownify = (str, mode = 'full') => {
 
   return `<div class="markdown-it">${renderedText}</div>`;
 }
-
-const objectsForNavigation = (() => {
-  const paintings = getPaintingsCollection("de");
-  const graphics = getGraphicsVirtualObjectsCollection("de");
-  const allArtefacts = { ...paintings, ...graphics }
-  const allArtefactsArray = [];
-
-  for (const [key, value] of Object.entries(allArtefacts)) {
-    allArtefactsArray.push(value);
-  }
-  
-  const sortedArtefactsArray = allArtefactsArray.sort((a, b) => a.sortingNumber.localeCompare(b.sortingNumber));
-  const objectsForNavigation = sortedArtefactsArray.map(item => {
-    const { sortingNumber } = item;
-    const { entityType } = item;
-    const id = item.metadata.id;
-    const imgSrc = item.metadata.imgSrc;
-
-    return {
-      id, imgSrc, sortingNumber, entityType
-    };
-  });
-
-  return objectsForNavigation;
-})()
 
 const appendToFile = (path, str) => {
   const filepath = `./${path}`;
@@ -668,47 +586,7 @@ module.exports = function (eleventyConfig) {
     return paintingsCollectionEN;
   });
 
-  eleventyConfig.addCollection("graphicsRealObjectsDE", () => {
-    const graphicsRealObjectsDE = !config.generateGraphicsRealObjects
-      ? []
-      : getGraphicsRealObjectsCollection('de');
-    return graphicsRealObjectsDE;
-  });
 
-  eleventyConfig.addCollection("graphicsRealObjectsEN", () => {
-    const graphicsRealObjectsEN = !config.generateGraphicsRealObjects
-      ? []
-      : getGraphicsRealObjectsCollection('en');
-    return graphicsRealObjectsEN;
-  });
-
-  eleventyConfig.addCollection("graphicsVirtualObjectsDE", () => {
-    const graphicsVirtualObjectsDE = !config.generateGraphicsVirtualObjects
-      ? []
-      : getGraphicsVirtualObjectsCollection('de');
-    return graphicsVirtualObjectsDE;
-  });
-
-  eleventyConfig.addCollection("graphicsVirtualObjectsEN", () => {
-    const graphicsVirtualObjectsEN = !config.generateGraphicsVirtualObjects
-      ? []
-      : getGraphicsVirtualObjectsCollection('en');
-    return graphicsVirtualObjectsEN;
-  });
-
-  eleventyConfig.addCollection("archivalsDE", () => {
-    const archivalsDE = !config.generateArchivals
-      ? []
-      : getArchivalsCollection('de');
-    return archivalsDE;
-  });
-
-  eleventyConfig.addCollection("archivalsEN", () => {
-    const archivalsEN = !config.generateArchivals
-      ? []
-      : getArchivalsCollection('en');
-    return archivalsEN;
-  });
 
 
 
