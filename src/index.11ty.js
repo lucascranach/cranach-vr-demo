@@ -44,7 +44,7 @@ module.exports = {
       });
 
       const relatedWorksWithData = relatedWorks.filter(x => x !== undefined);
-      
+
       if(relatedWorksWithData.length === 0) return '';
       return `
         <a-entity position="-0.3 -0.04 0"
@@ -206,8 +206,23 @@ module.exports = {
     value: VR Demo 2022/23"></a-entity>
   <a-sky color="#000000"></a-sky>
   
-  <a-entity id="rig" position="0 1.8 0" rotation="0 0 0" movement-controls="fly: true" >
-    <a-camera id="camera" position="5 0 15" look-controls extended-wasd-controls="flyEnabled: true; turnEnabled: true; lookEnabled: true; maxLookAngle: 60;"><a-cursor></a-cursor></a-camera>
+  <a-entity 
+    id="player" 
+    position="0 1.8 0" 
+    rotation="0 0 0" 
+    movement-controls="fly: true"
+    player-move="
+      controllerListenerId: #controller-data;
+      navigationMeshClass: groundPlane;
+      teleportEnabled: false;
+      motionEnabled: false">
+    <a-camera 
+      id="camera" 
+      position="5 0 15" 
+      look-controls 
+      extended-wasd-controls="flyEnabled: true; turnEnabled: true; lookEnabled: true; maxLookAngle: 60;">
+      <a-cursor></a-cursor>
+    </a-camera>
     <a-entity id="left-controller" oculus-touch-controls="hand: left" ></a-entity>
     <a-entity id="right-controller" oculus-touch-controls="hand: right" oculus-thumbstick-controls orientationOffset="x:20 y:-0.25 z:6"></a-entity>
   </a-entity>
@@ -219,7 +234,7 @@ module.exports = {
 </a-entity>
 
 
-<a-entity
+<!--a-entity
 id="textArea"
 position="0 1.5 -1.9"
 geometry="primitive: plane;  width: 3; height: auto"
@@ -228,7 +243,7 @@ text="anchor: center; baseline: center; wrapCount: 40;
     transparent: true; opacity: 0.90; color: #8888FF;
     value: 1 \n 2 \n 3 \n 4"
 text-display>
-</a-entity>
+</a-entity-->
 </a-scene>
 
     `;

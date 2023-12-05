@@ -233,7 +233,7 @@ AFRAME.registerComponent('text-display', {
 		           "   Trigger: " + this.controllerData.rightTrigger.pressing + "\n" +
 		           "      Grip: " + this.controllerData.rightGrip.pressing + "\n";
 		           
-		this.el.setAttribute( "text", "value", this.text );
+		// this.el.setAttribute( "text", "value", this.text );
 	},
 	
 });
